@@ -56,9 +56,9 @@ module Google
       # @param json_key_io [IO] an IO from which the JSON key can be read
       # @param scope [string|array|nil] the scope(s) to access
       def self.make_creds(options = {})
-        json_key_io, scope, json_key_string = options.values_at(:json_key_io, :scope, :json_key_string)
-        if json_key_string
-          private_key, client_email = extract_json_key(json_key_string)
+        json_key_io, scope, json_key = options.values_at(:json_key_io, :scope, :json_key)
+        if json_key
+          private_key, client_email = extract_json_key(json_key)
         elsif json_key_io
           private_key, client_email = read_json_key(json_key_io)
         else
@@ -110,10 +110,10 @@ module Google
         alt.apply!(a_hash)
       end
 
-      def self.extract_json_key(json_key_string)
-        json_key_hash = JSON.parse(json_key_string)
-        private_key = json_key_hash['private_key']
-        client_email = json_key_hash['client_email']
+      def self.extract_json_key(json_key)
+        hash_key = JSON.parse(json_key)
+        private_key = hash_key['private_key']
+        client_email = hash_key['client_email']
         [private_key, client_email]
       end
     end
